@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -w & nodemon server/app.js"
+    "start": "webpack -w & nodemon server/app.js",
+    "postinstall": "node seed.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.17.1",
     "express": "^4.16.2",
+    "pg": "^6.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "sequelize": "^4.33.0",
     "volleyball": "^1.4.1"
   },
   "devDependencies": {
