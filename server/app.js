@@ -9,6 +9,12 @@ const app = express();
 app.use(volleyball);
 app.use(express.static(path.join(__dirname, '../public')));
 
+app.post('api/critters', (req, res, next) => {
+  Critter.create(req.body)
+  .then(created => res.send(created))
+  .catch(next);
+})
+
 app.get('/api/dogs', (req, res, next) => {
   Critter.fetchType('dog')
   .then(dogs => res.send(dogs))
@@ -26,6 +32,7 @@ app.get('/api/dragons', (req, res, next) => {
   .then(dragons => res.send(dragons))
   .catch(next);
 })
+
 
 app.get('/*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '..public/index.html'))

@@ -23,14 +23,46 @@ export default class Main extends Component {
       type: ''
     }
     this.selectCritters = this.selectCritters.bind(this);
+    this.createCritter = this.createCritter.bind(this);
   }
 
   selectCritters(critterName) {
-    axios.get(`/api/${critterName}`)
+    axios.get(`/api/${critterName}`)            //(the route to get the info from)
       .then(res => res.data)
       .then(critters => {
-        this.setState({critters})
+        this.setState({
+          critters,
+          type : critterName.slice(0, -1)
+        })
       })
+  }
+
+  createCritter(event) {                  //equivalent to handleSubmit function
+    event.preventDefault()
+
+    const form = event.target.parentNode;     //event.target is the button we clicked. we want the info in its parent, the form element
+    const name = form.name.value;
+    const image = form.image.value;
+    const type = this.state.type;
+
+    form.name.value = '';           //reset the form to be empty
+    form.image.value = '';
+
+    const critter = {           //create the object to add to the database
+      name,
+      image,
+      type,
+    }
+
+
+    axios.post('api/critters', critter)    //(where posting to, the object to post)
+    .then(res => res.data)
+    .then(newCritter => {
+      this.setState({
+        critters : [newCritter, ...this.state.critters]
+      })
+    })
+     
   }
 
   render() {
@@ -40,7 +72,7 @@ export default class Main extends Component {
           <h1>Gallery of Cute</h1>
         </div>
         <Navbar selectCritters={this.selectCritters} />
-        <AddCritter />
+        {this.state.type ? <AddCritter createCritter={this.createCritter} /> : null}
         <Critters critters={this.state.critters} />
       </div>
     )
